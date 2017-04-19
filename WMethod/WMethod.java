@@ -381,17 +381,34 @@ public class WMethod{
      Vector <String> tests=generateTests(transitionCover, w); // Generate tests.
      Utilities.printAllTestCases(tests); // Print tests.
      
-     // TODO: 	Write the necessary code to iterate through all test cases and run them against
-     // 		the FSM using the Utilities.runFSM() method. 
-     //
-     // Example use of the Utilities.runFSM() method
-     // Utilities.runFSM(FSM, 1, "a a b a b", " ");
-     
+
      for(int i = 0; i < tests.size(); i++) {
-    	 Utilities.runFSM(FSM, 1, tests.get(i).replace("", " ").trim(), " "); 
+    	 Utilities.runFSM(FSM, 1, tests.get(i).replace("", " ").trim(), " ");  
+       //Illegal token error made me do this...^^^^^^^^^^^^^^^^^^^^^^^
      }
      
+     printBondTests(tests);
+     
    }// End of main()
+   
+   public static void printBondTests(Vector<String> tests) {
+	   String currentTest = "";
+	     for(int i = 0; i < tests.size(); i++) {
+	    	 currentTest = tests.get(i).replace("", " ").trim();
+	    	 System.out.println("@Test");
+	    	 System.out.println("public void testCase" + i + "() {");
+	    	 Utilities.runFSM(FSM, 1, currentTest, " ");
+	    	 
+	    	 currentTest = "\"" + currentTest.replace(" ", "") + "\"";
+	    	 if (Utilities.outputPattern.contains("yes")) {
+	    		 System.out.println("\tassertTrue(JamesBond.bondRegex(" + currentTest + "));");
+	    	 }
+	    	 else {
+	    		 System.out.println("\tassertFalse(JamesBond.bondRegex(" + currentTest + "));");
+	    	 }
+	    	 System.out.println("}");
+	     }
+   }
    
 }//End of class WMethod
 
